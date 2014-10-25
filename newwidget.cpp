@@ -1,5 +1,6 @@
 #include <QApplication>
-
+#include <QString>
+#include <QtMath>
 #include "newwidget.hpp"
 
 NewWidget::NewWidget(QWidget *parent) :
@@ -22,11 +23,16 @@ NewWidget::NewWidget(QWidget *parent) :
     multButton = new QPushButton("&*");
     isButton=new QPushButton("&=");
     clearButton=new QPushButton("&CE");
+    powButton=new QPushButton("&x^");
 
     QGridLayout *layout = new QGridLayout;
-    QLabel *label = new QLabel;
+    label = new QLabel;
+    double_label=new QLabel;
 
-    layout->addWidget(label ,0,1);
+    layout->addWidget(label ,0,0);
+    layout->addWidget(double_label,0,1);
+    layout->addWidget(powButton,0,2);
+    layout->addWidget(clearButton,0,3);
     layout->addWidget(Button7,1,0);
     layout->addWidget(Button8,1,1);
     layout->addWidget(Button9,1,2);
@@ -61,6 +67,8 @@ NewWidget::NewWidget(QWidget *parent) :
     QObject::connect(multButton, SIGNAL(clicked()), this , SLOT(mult()));
     QObject::connect(comButton, SIGNAL(clicked()), this , SLOT(com()));
     QObject::connect(isButton, SIGNAL(clicked()), this , SLOT(is()));
+    QObject::connect(powButton, SIGNAL(clicked()), this , SLOT(pow()));
+
 
     setLayout( layout );
     setWindowTitle("Calc");
@@ -69,7 +77,7 @@ NewWidget::NewWidget(QWidget *parent) :
 
 void NewWidget::n0()
 {
-    label->setText( label->text() + "0" );
+    label->setText(label->text()+"0");
 }
 void NewWidget::n1()
 {
@@ -79,10 +87,7 @@ void NewWidget::n2()
 {
     label->setText( label->text() + "2" );
 }
-void NewWidget::clear()
-{
-    label->setText(  "" );
-}
+
 void NewWidget::n3()
 {
     label->setText( label->text() + "3" );
@@ -113,19 +118,28 @@ void NewWidget::n9()
 }
 void NewWidget::add()
 {
-    label->setText(label->text()+ "+");
+    x=(label->text()).toDouble();
+    op='+';
+     label->setText( "" );
 }
 void NewWidget::sub()
 {
-    label->setText( label->text() + "-" );
+    x=(label->text()).toDouble();
+    op='-';
+    label->setText( "" );
 }
 void NewWidget::div()
 {
-    label->setText( label->text() + "/" );
+    x=(label->text()).toDouble();
+    op='/' ;
+    label->setText( "" );
+
 }
 void NewWidget::mult()
 {
-    label->setText( label->text() + "*" );
+    x=(label->text()).toDouble();
+    op='*' ;
+    label->setText( "" );
 }
 void NewWidget::com()
 {
@@ -133,6 +147,37 @@ void NewWidget::com()
 }
 void NewWidget::is()
 {
-    label->setText( label->text() + "=" );
+    y=(label->text()).toDouble();    
+    switch (op)
+         {
+                case '+':
+                label->setNum(x+y);
+                break;
+                case '-':
+                label->setNum(x-y);
+                break;
+                case '*':
+                label->setNum(x*y);
+                break;
+                case '/':
+                label->setNum(x/y);
+                break;
+                case '^':
+                label->setNum((qPow(x,y)));
+                break;
+                default :;
+        }
 }
+void NewWidget::clear()
+{
+    label->setText(  "" );
+    x=0,y=0,op=' ';
 
+}
+void NewWidget::pow()
+{
+    x=(label->text()).toDouble();
+    op='^';
+    label->setText(  "" );
+
+}
