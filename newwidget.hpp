@@ -28,14 +28,16 @@ public slots:
     void n0();
     void mult();
     void com();
-    void clear();
-    void show();
+    void clear();    
     void div();
     void sub();
     void add();
     void is();
+    void pow();
+
 private:
     QLabel* label ;
+    QLabel* double_label;
     QGridLayout* layout;
     QPushButton * Button0;
     QPushButton * Button1;
@@ -54,6 +56,9 @@ private:
     QPushButton * multButton;
     QPushButton * isButton;
     QPushButton * clearButton;
+    QPushButton * powButton;
+    qreal x,y;
+    char op;
 };
 
 
